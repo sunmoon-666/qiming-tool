@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>起名工坊 · 新生儿中文起名</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23B23A2E'/%3E%3Ctext x='32' y='44' font-size='36' font-family='serif' font-weight='bold' fill='%23F6F1E7' text-anchor='middle'%3E%E5%90%8D%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --paper:#F6F1E7;
+    --paper-deep:#EDE6D5;
+    --ink:#23211C;
+    --ink-soft:#5A564C;
+    --seal:#B23A2E;
+    --seal-deep:#9A2F25;
+    --gold:#B98A3E;
+    --bamboo:#3E6B55;
+    --line:#D9CFB9;
+    --card:#FBF7EE;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    font-family:"PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  .serif{
+    font-family:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSun",serif;
+  }
+
+  /* ===== 顶部 ===== */
+  .hero{
+    text-align:center;
+    padding:48px 20px 8px;
+    position:relative;
+  }
+  .seal{
+    width:64px;height:64px;
+    background:var(--seal);
+    border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 18px;
+    box-shadow:0 6px 18px rgba(178,58,46,.28);
+    transform:rotate(-3deg);
+  }
+  .seal span{
+    color:var(--paper);
+    font-family:"Noto Serif SC","Songti SC","STSong",serif;
+    font-size:30px;font-weight:700;line-height:1;
+  }
+  .hero h1{
+    font-family:"Noto Serif SC","Songti SC","STSong",serif;
+    font-size:40px;font-weight:700;letter-spacing:2px;
+  }
+  .hero h1 .accent{color:var(--seal);}
+  .hero p{
+    margin-top:10px;color:var(--ink-soft);font-size:15px;
+    max-width:420px;margin-left:auto;margin-right:auto;
+  }
+  .rule{
+    width:64px;height:3px;background:var(--gold);
+    margin:22px auto 0;border-radius:2px;
+  }
+
+  /* ===== 控制面板 ===== */
+  .panel{
+    max-width:680px;margin:28px auto 0;padding:0 20px;
+  }
+  .panel-inner{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:22px 20px;
+    box-shadow:0 10px 30px rgba(60,50,30,.08);
+  }
+  .field{margin-bottom:18px;}
+  .field:last-child{margin-bottom:0;}
+  .field-label{
+    font-size:13px;color:var(--ink-soft);font-weight:600;
+    margin-bottom:8px;letter-spacing:1px;
+  }
+  input[type=text]{
+    width:100%;
+    font-size:18px;
+    padding:12px 14px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Noto Serif SC","Songti SC",serif;
+    letter-spacing:2px;
+    transition:border-color .15s;
+  }
+  input[type=text]:focus{outline:none;border-color:var(--seal);background:#fff;}
+  .seg{display:flex;gap:8px;flex-wrap:wrap;}
+  .seg-btn{
+    flex:1;min-width:72px;
+    padding:10px 8px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:var(--paper);
+    color:var(--ink-soft);
+    font-size:15px;cursor:pointer;
+    transition:all .15s;
+    min-height:44px;
+  }
+  .seg-btn.on{
+    background:var(--ink);color:var(--paper);border-color:var(--ink);
+  }
+  .seg-btn.on[data-g="b"]{background:var(--bamboo);border-color:var(--bamboo);}
+  .seg-btn.on[data-g="g"]{background:var(--seal);border-color:var(--seal);}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .chip-wrap{display:flex;gap:8px;flex-wrap:wrap;}
+  .chip{
+    padding:8px 14px;border:1px solid var(--line);border-radius:999px;
+    background:var(--paper);color:var(--ink-soft);font-size:14px;cursor:pointer;
+    min-height:40px;transition:all .15s;
+  }
+  .chip.on{background:var(--gold);border-color:var(--gold);color:#fff;font-weight:600;}
+  .gen-btn{
+    width:100%;
+    padding:15px;
+    margin-top:6px;
+    background:var(--seal);
+    color:#fff;
+    font-family:"Noto Serif SC","Songti SC",serif;
+    font-size:19px;font-weight:700;letter-spacing:4px;
+    border:none;border-radius:12px;cursor:pointer;
+    box-shadow:0 8px 22px rgba(178,58,46,.32);
+    transition:transform .12s,box-shadow .12s;
+    min-height:52px;
+  }
+  .gen-btn:active{transform:translateY(1px);box-shadow:0 4px 12px rgba(178,58,46,.28);}
+
+  /* ===== 结果 ===== */
+  .results{max-width:900px;margin:34px auto 60px;padding:0 20px;}
+  .results-head{
+    display:flex;align-items:baseline;justify-content:space-between;
+    margin-bottom:16px;flex-wrap:wrap;gap:8px;
+  }
+  .results-head h2{
+    font-family:"Noto Serif SC","Songti SC",serif;
+    font-size:22px;font-weight:700;
+  }
+  .results-head .count{color:var(--ink-soft);font-size:14px;}
+  .grid{display:grid;grid-template-columns:1fr;gap:14px;}
+  @media (min-width:640px){.grid{grid-template-columns:1fr 1fr;}}
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-left:4px solid var(--seal);
+    border-radius:12px;
+    padding:16px 16px 14px;
+    position:relative;
+    transition:transform .12s;
+  }
+  .card:hover{transform:translateY(-2px);}
+  .name-row{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .fullname{
+    font-family:"Noto Serif SC","Songti SC",serif;
+    font-size:30px;font-weight:700;letter-spacing:4px;line-height:1.2;
+  }
+  .fullname .surname{color:var(--seal);}
+  .act{display:flex;gap:6px;}
+  .icon-btn{
+    width:40px;height:40px;
+    border:1px solid var(--line);border-radius:9px;
+    background:var(--paper);color:var(--ink-soft);
+    cursor:pointer;font-size:16px;line-height:1;
+    display:flex;align-items:center;justify-content:center;
+    transition:all .15s;
+  }
+  .icon-btn:hover{border-color:var(--seal);color:var(--seal);}
+  .icon-btn.faved{background:var(--seal);border-color:var(--seal);color:#fff;}
+  .char-grid{margin-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;}
+  .char-cell{
+    background:var(--paper);border:1px solid var(--line);
+    border-radius:8px;padding:8px 10px;
+  }
+  .char-cell .cc-top{display:flex;align-items:center;gap:8px;}
+  .char-cell .cc-ch{
+    font-family:"Noto Serif SC","Songti SC",serif;
+    font-size:22px;font-weight:700;
+  }
+  .char-cell .cc-py{color:var(--ink-soft);font-size:12px;}
+  .char-cell .wx{
+    margin-left:auto;font-size:11px;padding:2px 8px;border-radius:999px;
+    background:var(--paper-deep);color:var(--ink-soft);
+  }
+  .char-cell .wx[data-wx="金"]{background:#F2E6C9;color:#8A6A1F;}
+  .char-cell .wx[data-wx="木"]{background:#DFEBDD;color:#3E6B55;}
+  .char-cell .wx[data-wx="水"]{background:#DCE7F0;color:#2F5F8A;}
+  .char-cell .wx[data-wx="火"]{background:#F4DFD6;color:#B23A2E;}
+  .char-cell .wx[data-wx="土"]{background:#E9E3D3;color:#7A6A3F;}
+  .char-cell .cc-m{
+    font-size:12.5px;color:var(--ink-soft);margin-top:5px;line-height:1.5;
+  }
+  .card-foot{
+    margin-top:10px;font-size:12px;color:var(--ink-soft);
+    border-top:1px dashed var(--line);padding-top:8px;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px;
+  }
+
+  /* ===== 收藏 ===== */
+  .fav{max-width:900px;margin:0 auto 60px;padding:0 20px;}
+  .fav h3{
+    font-family:"Noto Serif SC","Songti SC",serif;font-size:19px;font-weight:700;
+    margin-bottom:6px;
+  }
+  .fav .hint{color:var(--ink-soft);font-size:13px;margin-bottom:14px;}
+  .fav-grid{display:grid;grid-template-columns:1fr;gap:10px;}
+  @media (min-width:640px){.fav-grid{grid-template-columns:1fr 1fr;}}
+  .fav-card{
+    background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;
+  }
+  .fav-card .f-name{
+    font-family:"Noto Serif SC","Songti SC",serif;
+    font-size:22px;font-weight:700;letter-spacing:3px;
+  }
+  .fav-card .f-name .surname{color:var(--seal);}
+  .fav-card .f-meta{color:var(--ink-soft);font-size:12px;}
+
+  /* ===== 底部 ===== */
+  footer{
+    text-align:center;color:var(--ink-soft);font-size:12.5px;
+    padding:26px 20px 40px;border-top:1px solid var(--line);
+  }
+  .toast{
+    position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:var(--paper);
+    padding:11px 22px;border-radius:999px;font-size:14px;
+    opacity:0;pointer-events:none;transition:all .25s;z-index:50;
+    box-shadow:0 8px 24px rgba(0,0,0,.25);
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  .empty{
+    text-align:center;color:var(--ink-soft);font-size:14px;
+    padding:40px 20px;border:1px dashed var(--line);border-radius:12px;
+  }
+  @media (min-width:768px){
+    .hero{padding:60px 20px 12px;}
+    .hero h1{font-size:48px;}
+  }
+</style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="seal" aria-hidden="true"><span>名</span></div>
+    <h1 class="serif">起名<span class="accent">工坊</span></h1>
+    <p>结合字义、五行与音韵，为新生儿挑选一个好名字。</p>
+    <div class="rule"></div>
+  </header>
+
+  <section class="panel">
+    <div class="panel-inner">
+      <div class="field">
+        <div class="field-label">姓氏</div>
+        <input type="text" id="surname" maxlength="2" placeholder="输入姓氏，如：王 李 张" autocomplete="off">
+      </div>
+      <div class="row2">
+        <div class="field">
+          <div class="field-label">性别</div>
+          <div class="seg" id="gender">
+            <button type="button" class="seg-btn on" data-g="n">不限</button>
+            <button type="button" class="seg-btn" data-g="b">男宝</button>
+            <button type="button" class="seg-btn" data-g="g">女宝</button>
+          </div>
+        </div>
+        <div class="field">
+          <div class="field-label">名长</div>
+          <div class="seg" id="len">
+            <button type="button" class="seg-btn on" data-l="2">双字名</button>
+            <button type="button" class="seg-btn" data-l="1">单字名</button>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">五行偏好（可不选）</div>
+        <div class="chip-wrap" id="wx">
+          <button type="button" class="chip on" data-w="n">不限</button>
+          <button type="button" class="chip" data-w="金">金</button>
+          <button type="button" class="chip" data-w="木">木</button>
+          <button type="button" class="chip" data-w="水">水</button>
+          <button type="button" class="chip" data-w="火">火</button>
+          <button type="button" class="chip" data-w="土">土</button>
+        </div>
+      </div>
+      <button type="button" class="gen-btn" id="gen">为 TA 起名</button>
+    </div>
+  </section>
+
+  <section class="results" id="results">
+    <div class="results-head">
+      <h2 class="serif">名字建议</h2>
+      <span class="count" id="count"></span>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="fav" id="fav">
+    <h3 class="serif">我的收藏</h3>
+    <div class="hint" id="fav-hint">点击名字卡片右下角的「藏」可加入收藏。</div>
+    <div class="fav-grid" id="fav-grid"></div>
+  </section>
+
+  <footer>起名工坊 · 名字仅供参考，建议结合生辰八字与家规再作定夺</footer>
+  <div class="toast" id="toast"></div>
+
+<script>
+/* ============ 汉字库 ============ */
+/* 字段: c字符 py拼音 wx五行 g性别(b男/g女/n通用) m字义 */
+var CHARS = [
+  {c:"泽",py:"zé",wx:"水",g:"n",m:"恩泽润物，胸怀宽广"},
+  {c:"晨",py:"chén",wx:"金",g:"n",m:"清晨朝气，蓬勃向上"},
+  {c:"宇",py:"yǔ",wx:"土",g:"n",m:"气宇轩昂，胸襟开阔"},
+  {c:"宸",py:"chén",wx:"金",g:"b",m:"帝王居所，尊贵不凡"},
+  {c:"煜",py:"yù",wx:"火",g:"n",m:"光辉照耀，明朗坦荡"},
+  {c:"铭",py:"míng",wx:"金",g:"n",m:"铭记在心，功业留名"},
+  {c:"浩",py:"hào",wx:"水",g:"b",m:"浩然正气，气度恢弘"},
+  {c:"然",py:"rán",wx:"金",g:"n",m:"坦然自若，泰然处世"},
+  {c:"睿",py:"ruì",wx:"金",g:"b",m:"睿智通达，明辨是非"},
+  {c:"昊",py:"hào",wx:"火",g:"b",m:"昊天广大，胸襟无边"},
+  {c:"峻",py:"jùn",wx:"土",g:"b",m:"高峻挺拔，品性刚毅"},
+  {c:"凯",py:"kǎi",wx:"木",g:"b",m:"凯旋而归，功成圆满"},
+  {c:"君",py:"jūn",wx:"木",g:"n",m:"君子之风，端方有礼"},
+  {c:"亦",py:"yì",wx:"土",g:"n",m:"亦然如此，从容自得"},
+  {c:"彦",py:"yàn",wx:"木",g:"b",m:"才彦俊杰，学识出众"},
+  {c:"嘉",py:"jiā",wx:"木",g:"n",m:"嘉言善行，美好出众"},
+  {c:"允",py:"yǔn",wx:"土",g:"n",m:"允执其中，诚实守信"},
+  {c:"博",py:"bó",wx:"水",g:"n",m:"博学多才，胸有丘壑"},
+  {c:"修",py:"xiū",wx:"金",g:"n",m:"修身养性，品行端正"},
+  {c:"哲",py:"zhé",wx:"火",g:"n",m:"哲思明理，洞察真知"},
+  {c:"诚",py:"chéng",wx:"金",g:"n",m:"诚心正意，一诺千金"},
+  {c:"子",py:"zǐ",wx:"水",g:"n",m:"才德兼备，温润聪慧"},
+  {c:"安",py:"ān",wx:"土",g:"n",m:"平安顺遂，安稳从容"},
+  {c:"宁",py:"níng",wx:"火",g:"n",m:"宁静致远，安然自在"},
+  {c:"墨",py:"mò",wx:"水",g:"n",m:"笔墨书香，文雅有涵"},
+  {c:"衡",py:"héng",wx:"土",g:"b",m:"权衡有度，公正持中"},
+  {c:"骁",py:"xiāo",wx:"金",g:"b",m:"骁勇果敢，气概不凡"},
+  {c:"言",py:"yán",wx:"木",g:"n",m:"言行合一，文辞有度"},
+  {c:"朗",py:"lǎng",wx:"火",g:"n",m:"开朗明朗，心胸豁达"},
+  {c:"竣",py:"jùn",wx:"土",g:"b",m:"俊秀挺拔，卓然出众"},
+  {c:"萱",py:"xuān",wx:"木",g:"g",m:"忘忧之草，快乐无忧"},
+  {c:"芷",py:"zhǐ",wx:"木",g:"g",m:"香草高洁，清雅脱俗"},
+  {c:"涵",py:"hán",wx:"水",g:"n",m:"涵养深厚，气度优雅"},
+  {c:"诗",py:"shī",wx:"金",g:"g",m:"诗意才情，温婉知性"},
+  {c:"婉",py:"wǎn",wx:"土",g:"g",m:"温婉柔美，娴静端庄"},
+  {c:"妍",py:"yán",wx:"水",g:"g",m:"妍丽美好，清秀可人"},
+  {c:"清",py:"qīng",wx:"水",g:"n",m:"清雅明净，心地澄澈"},
+  {c:"悦",py:"yuè",wx:"金",g:"n",m:"喜悦欢欣，心境明朗"},
+  {c:"雨",py:"yǔ",wx:"水",g:"g",m:"润泽万物，温润包容"},
+  {c:"晴",py:"qíng",wx:"火",g:"g",m:"晴空万里，明朗开朗"},
+  {c:"媛",py:"yuàn",wx:"火",g:"g",m:"窈窕淑媛，端庄美好"},
+  {c:"瑶",py:"yáo",wx:"火",g:"g",m:"瑶池美玉，温润珍贵"},
+  {c:"芸",py:"yún",wx:"木",g:"g",m:"芸香之气，淡雅书香"},
+  {c:"灵",py:"líng",wx:"火",g:"n",m:"灵动聪慧，颖悟过人"},
+  {c:"若",py:"ruò",wx:"木",g:"g",m:"若水若兰，柔中带刚"},
+  {c:"汐",py:"xī",wx:"水",g:"g",m:"潮汐灵动，柔和如水"},
+  {c:"诺",py:"nuò",wx:"火",g:"n",m:"一诺千金，信守承诺"},
+  {c:"桐",py:"tóng",wx:"木",g:"g",m:"梧桐栖凤，高洁优雅"},
+  {c:"舒",py:"shū",wx:"金",g:"n",m:"舒展从容，安逸自在"},
+  {c:"伊",py:"yī",wx:"土",g:"g",m:"伊人婉约，风姿绰约"},
+  {c:"念",py:"niàn",wx:"火",g:"g",m:"念念不忘，情意深长"},
+  {c:"知",py:"zhī",wx:"火",g:"n",m:"知书达理，聪慧明理"},
+  {c:"闻",py:"wén",wx:"水",g:"n",m:"闻达四方，见多识广"},
+  {c:"姝",py:"shū",wx:"金",g:"g",m:"静女其姝，温婉美丽"},
+  {c:"星",py:"xīng",wx:"金",g:"n",m:"星光闪耀，前景光明"},
+  {c:"月",py:"yuè",wx:"木",g:"g",m:"月华如水，清雅脱俗"},
+  {c:"兮",py:"xī",wx:"金",g:"g",m:"文气悠扬，清雅有致"}
+];
+
+/* ============ 状态 ============ */
+var state = {
+  gender:"n",
+  length:2,
+  wx:"n",
+  favs: JSON.parse((function(){try{return localStorage.getItem("qiming_favs")||"[]";}catch(e){return "[]";}})())
+};
+
+/* ============ 工具函数 ============ */
+function $(id){return document.getElementById(id);}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+
+function pool(){
+  var list = CHARS.slice();
+  if(state.gender!=="n") list = list.filter(function(c){ return c.g==="n" || c.g===state.gender; });
+  if(state.wx!=="n") list = list.filter(function(c){ return c.wx===state.wx; });
+  return list;
+}
+
+function wxOf(ch){for(var i=0;i<CHARS.length;i++){if(CHARS[i].c===ch)return CHARS[i].wx;}return "";}
+function meanOf(ch){for(var i=0;i<CHARS.length;i++){if(CHARS[i].c===ch)return CHARS[i].m;}return "";}
+function pyOf(ch){for(var i=0;i<CHARS.length;i++){if(CHARS[i].c===ch)return CHARS[i].py;}return "";}
+
+function makeName(){
+  var p = pool();
+  if(p.length===0) return null;
+  p = shuffle(p);
+  var given = [];
+  if(state.length===2){
+    given = [p[0].c, p[1].c];
+  } else {
+    given = [p[0].c];
+  }
+  var full = state.surname + given.join("");
+  var key = full + "|" + state.gender;
+  return {
+    key:key,
+    given:given,
+    full:full
+  };
+}
+
+/* ============ 渲染 ============ */
+function nameHTML(n){
+  var cells = n.given.map(function(ch){
+    var wx = wxOf(ch);
+    return '<div class="char-cell">'+
+      '<div class="cc-top"><span class="cc-ch">'+ch+'</span><span class="cc-py">'+pyOf(ch)+'</span>'+
+      '<span class="wx" data-wx="'+wx+'">'+wx+'</span></div>'+
+      '<div class="cc-m">'+meanOf(ch)+'</div></div>';
+  }).join("");
+  var sn = (state.surname||"");
+  var faved = state.favs.indexOf(n.full)>=0;
+  return '<div class="card">'+
+    '<div class="name-row">'+
+      '<div class="fullname"><span class="surname">'+sn+'</span>'+n.given.join("")+'</div>'+
+    '</div>'+
+    '<div class="char-grid">'+cells+'</div>'+
+    '<div class="card-foot">'+
+      '<span>音律和谐 · 字义美好</span>'+
+      '<span class="act">'+
+        '<button type="button" class="icon-btn'+(faved?' faved':'')+'" data-copy="'+n.full+'" title="复制名字">复</button>'+
+        '<button type="button" class="icon-btn'+(faved?' faved':'')+'" data-fav="'+n.full+'" title="收藏名字">'+(faved?'藏':'收')+'</button>'+
+      '</span>'+
+    '</div></div>';
+}
+
+function render(){
+  var faved = state.favs.slice();
+  $("fav-grid").innerHTML = faved.map(function(name){
+    var given = name.slice(state.surname.length);
+    var cells = (given||"").split("").map(function(ch){
+      var wx = wxOf(ch);
+      return '<span class="wx" data-wx="'+wx+'">'+wx+'</span>';
+    }).join(" ");
+    var sn = state.surname||"";
+    return '<div class="fav-card">'+
+      '<div><div class="f-name"><span class="surname">'+sn+'</span>'+given+'</div>'+
+      '<div class="f-meta">'+ (given||"").split("").map(function(ch){return ch+" "+pyOf(ch);}).join("　") +'</div></div>'+
+      '<button type="button" class="icon-btn faved" data-unfav="'+name+'" title="取消收藏">×</button>'+
+    '</div>';
+  }).join("");
+  if(faved.length===0){
+    $("fav-grid").innerHTML = '<div class="empty">还没有收藏的名字</div>';
+  }
+}
+
+function gen(){
+  var sn = ($("surname").value||"").trim();
+  state.surname = sn;
+  var p = pool();
+  if(p.length===0){
+    toast("当前筛选下可用汉字太少，请放宽条件");
+    return;
+  }
+  var names = [];
+  var seen = {};
+  var tries = 0;
+  while(names.length<6 && tries<200){
+    tries++;
+    var n = makeName();
+    if(!n) break;
+    if(!seen[n.key]){ seen[n.key]=true; names.push(n); }
+  }
+  if(names.length===0){ toast("暂无可生成的名字，请调整条件"); return; }
+  var html = names.map(nameHTML).join("");
+  $("grid").innerHTML = html;
+  $("count").textContent = "为你生成 " + names.length + " 个建议";
+  render();
+}
+
+/* ============ toast ============ */
+var toastTimer=null;
+function toast(msg){
+  var t=$("toast"); t.textContent=msg; t.classList.add("show");
+  if(toastTimer) clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){t.classList.remove("show");},1800);
+}
+
+/* ============ 事件 ============ */
+$("gender").addEventListener("click",function(e){
+  var b=e.target.closest(".seg-btn"); if(!b) return;
+  this.querySelectorAll(".seg-btn").forEach(function(x){x.classList.remove("on");});
+  b.classList.add("on"); state.gender=b.getAttribute("data-g");
+});
+$("len").addEventListener("click",function(e){
+  var b=e.target.closest(".seg-btn"); if(!b) return;
+  this.querySelectorAll(".seg-btn").forEach(function(x){x.classList.remove("on");});
+  b.classList.add("on"); state.length=parseInt(b.getAttribute("data-l"),10);
+});
+$("wx").addEventListener("click",function(e){
+  var b=e.target.closest(".chip"); if(!b) return;
+  this.querySelectorAll(".chip").forEach(function(x){x.classList.remove("on");});
+  b.classList.add("on"); state.wx=b.getAttribute("data-w");
+});
+$("gen").addEventListener("click",gen);
+
+$("grid").addEventListener("click",function(e){
+  var c=e.target.closest("[data-copy]");
+  if(c){
+    var name=c.getAttribute("data-copy");
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(name).then(function(){toast("已复制： "+name);},function(){toast("已复制： "+name);});
+    } else {
+      toast("已复制： "+name);
+    }
+    return;
+  }
+  var f=e.target.closest("[data-fav]");
+  if(f){
+    var name=f.getAttribute("data-fav");
+    var i=state.favs.indexOf(name);
+    if(i>=0){ state.favs.splice(i,1); toast("已取消收藏"); }
+    else { state.favs.push(name); toast("已收藏："+name); }
+    saveFavs(); render(); gen(); return;
+  }
+});
+$("fav-grid").addEventListener("click",function(e){
+  var f=e.target.closest("[data-unfav]");
+  if(!f) return;
+  var name=f.getAttribute("data-unfav");
+  var i=state.favs.indexOf(name);
+  if(i>=0){ state.favs.splice(i,1); saveFavs(); render(); }
+});
+function saveFavs(){
+  try{ localStorage.setItem("qiming_favs", JSON.stringify(state.favs)); }catch(e){}
+}
+
+/* ============ 首屏 ============ */
+gen();
+</script>
+</body>
+</html>
